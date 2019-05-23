@@ -79,8 +79,8 @@ if __name__ == '__main__':
     ', '.join(central_or_shifts)
   )
 
-  configDir = os.path.join("/home",       getpass.getuser(), "hhAnalysis", era, version)
-  outputDir = os.path.join("/hdfs/local", getpass.getuser(), "hhAnalysis", era, version)
+  configDir = os.path.join("/afs/cern.ch/work/", getpass.getuser()[0], getpass.getuser(), "hhAnalysis", era, version)
+  outputDir = os.path.join("/afs/cern.ch/work/", getpass.getuser()[0], getpass.getuser(), "hhAnalysis", era, version)
 
   analysis = analyzeConfig_hh_bbww_inclusive(
     configDir               = configDir,

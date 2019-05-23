@@ -70,8 +70,8 @@ if __name__ == '__main__':
   )
 
   analysis = syncNtupleConfig(
-    config_dir = os.path.join("/home",       getpass.getuser(), "hhAnalysis", args.era, args.version),
-    output_dir = os.path.join("/hdfs/local", getpass.getuser(), "hhAnalysis", args.era, args.version),
+    config_dir = os.path.join("/afs/cern.ch/work/", getpass.getuser()[0], getpass.getuser(), "hhAnalysis", era, version),
+    output_dir = os.path.join("/afs/cern.ch/work/", getpass.getuser()[0], getpass.getuser(), "hhAnalysis", era, version),
     output_filename    = output,
     version            = version,
     era                = era,
@@ -89,6 +89,8 @@ if __name__ == '__main__':
     systematics_label  = systematics_label,
     project_dir        = os.path.join(os.getenv('CMSSW_BASE'), 'src', 'hhAnalysis', 'bbww'),
     file_pattern       = 'hhAnalyzeRun_%s.py',
+    jet_cleaning       = '',
+    gen_matching       = '',
     suffix             = 'bbww',
   )
 
