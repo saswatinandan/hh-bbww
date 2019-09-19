@@ -12,6 +12,8 @@ import getpass
 
 sys_choices          = [ 'full' ] + systematics.an_addMEM_opts
 max_mem_integrations = 10000000
+method_mem = True
+method_hme = False
 systematics.full     = systematics.an_addMEM
 mode_choices = {
   'default' : 'full',
@@ -22,6 +24,7 @@ mode_choices = {
 parser = tthAnalyzeParser(isAddMEM = True)
 parser.add_modes(mode_choices.keys())
 parser.add_sys(sys_choices)
+parser.add_syshme(sys_choices)
 parser.add_nonnominal()
 parser.add_use_home(False)
 parser.add_argument('-n', '--max-mem-integrations',
@@ -29,6 +32,17 @@ parser.add_argument('-n', '--max-mem-integrations',
   required = False,
   help = 'R|Maximum number of input files per one job (default: %i)' % max_mem_integrations
 )
+parser.add_argument('-mem', '--method-mem',
+  type = bool, dest = 'method_mem', metavar = 'MEM method', default = method_mem,
+  required = False,
+  help = 'R|whether MEM method to be used in the analyzer' 
+)
+parser.add_argument('-hme', '--method-hme',
+  type = bool, dest = 'method_hme', metavar = 'HME method', default = method_hme,
+  required = False,
+  help = 'R|whether HME method to be used in the analyzer'
+)
+
 args = parser.parse_args()
 
 # Common arguments
@@ -46,11 +60,14 @@ running_method     = args.running_method
 # Additional arguments
 mode              = args.mode
 systematics_label = args.systematics
+systematics_label_hme = args.systematics_hme
 use_nonnominal    = args.original_central
 use_home          = args.use_home
 
 # Custom arguments
 max_mem_integrations = args.max_mem_integrations
+method_mem           = args.method_mem
+method_hme           = args.method_hme
 
 # Use the arguments
 central_or_shifts = []
@@ -58,6 +75,12 @@ for systematic_label in systematics_label:
   for central_or_shift in getattr(systematics, systematic_label):
     if central_or_shift not in central_or_shifts:
       central_or_shifts.append(central_or_shift)
+central_or_shifts_hme = []
+for systematic_label_hme in systematics_label_hme:
+  for central_or_shift in getattr(systematics, systematic_label_hme):
+    if central_or_shift not in central_or_shifts_hme:
+      central_or_shifts_hme.append(central_or_shift)
+
 version = "%s_%s_%s" % (
   version, mode, 'nonNom' if use_nonnominal else 'nom'
 )
@@ -95,9 +118,12 @@ if __name__ == '__main__':
     leptonSelection          = "Fakeable",
     isDebug                  = debug,
     central_or_shift         = central_or_shifts,
+    central_or_shift_hme     = central_or_shifts_hme,
     dry_run                  = dry_run,
     use_nonnominal           = use_nonnominal,
     use_home                 = use_home,
+    method_mem               = method_mem,
+    method_hme               = method_hme,
   )
 
   goodToGo = addMEMProduction.create()
